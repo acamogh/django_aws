@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block blog_post %}
+
+    <div class="blog-post">
+        {% for threads in posts  %}
+            <p class="blog-post-title">{{ threads.title }}</p>
+            <p class="blog-post-meta"><i class="fa fa-clock-o">&nbsp{{ threads.pub_date|date  }}</i> <a class="pull-right" href="#">{{ threads.user_set.first }}</a></p>
+            {{ threads.description|slice:'200' }}.....
+            <p><a href="{% url 'detail' threads.id %}">See more</a></p>
+            <hr />
+        {% endfor %}
+    </div><!-- /.blog-post -->
+    <nav>
+        <ul class="pagination">
+            {% if posts.has_previous %}
+                <li><a href="?page={{ posts.previous_page_number }}"><i class="fa fa-arrow-left"></i>&nbsp;previous</a></li>
+            {% endif %}
+
+            {% for number in posts.paginator.page_range %}
+                {% ifequal number posts.number  %}
+                    <li class="active"><a href="?page={{ number }}">{{ number }}</a></li>
+                    {% else %}
+                    <li ><a href="?page={{ number }}">{{ number }}</a></li>
+                
+                {% endifequal %}
+            {% endfor %}
+
+            {% if posts.has_next %}
+                <li><a href="?page={{ posts.next_page_number }}">Next &nbsp<i class="fa fa-arrow-right"></i></a></li>
+            {% endif %}
+        </ul>
+
+
+    </nav>
+{% endblock %}
